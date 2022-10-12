@@ -24,7 +24,7 @@ Route::get('list-pelanggaran', [App\Http\Controllers\PelanggaranController::clas
 Route::get('list-penghargaan', [App\Http\Controllers\PenghargaanController::class, 'list_penghargaan']);
 
 Route::get('top-pelanggar', [App\Http\Controllers\PelanggaranController::class, 'top_pelanggar']);
-Route::get('top-penghargaan', [App\Http\Controllers\PenghargaanController::class, 'top_penghargaan']);
+Route::get('top-prestasi', [App\Http\Controllers\PenghargaanController::class, 'top_penghargaan']);
 
 Route::post('tambah-pelanggar', [App\Http\Controllers\PelanggaranController::class, 'tambah_pelanggar']);
 Route::post('tambah-prestasi', [App\Http\Controllers\PenghargaanController::class, 'tambah_penghargaan']);
