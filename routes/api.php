@@ -30,3 +30,5 @@ Route::post('tambah-pelanggar', [App\Http\Controllers\PelanggaranController::cla
 Route::post('tambah-prestasi', [App\Http\Controllers\PenghargaanController::class, 'tambah_penghargaan']);
 
 Route::post('absensi', [App\Http\Controllers\AbsensiController::class, 'absensi']);
+
+Route::post('tambah-kelas', [App\Http\Controllers\KelasController::class, 'tambah_kelas']);
