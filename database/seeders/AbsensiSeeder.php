@@ -14,14 +14,6 @@ class AbsensiSeeder extends Seeder
      */
     public function run()
     {
-        Absensi::create([
-            'siswa_id' => 1,
-            'keterangan' => 'Alfa'
-        ]);
-
-        Absensi::create([
-            'siswa_id' => 2,
-            'keterangan' => 'Hadir'
-        ]);
+        Absensi::factory()->count(10000)->create();
     }
 }
