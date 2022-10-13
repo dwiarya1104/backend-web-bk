@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SiswaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,3 +33,4 @@ Route::post('tambah-prestasi', [App\Http\Controllers\PenghargaanController::clas
 Route::post('absensi', [App\Http\Controllers\AbsensiController::class, 'absensi']);
 
 Route::post('tambah-kelas', [App\Http\Controllers\KelasController::class, 'tambah_kelas']);
+Route::get('tes',[SiswaController::class,'tes']);

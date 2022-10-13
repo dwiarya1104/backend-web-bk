@@ -14,16 +14,6 @@ class SiswaSeeder extends Seeder
      */
     public function run()
     {
-        Siswa::create([
-            'nis' => '12069',
-            'nama' => 'Achmad Dhani',
-            'kelas_id' => 1
-        ]);
-
-        Siswa::create([
-            'nis' => '12070',
-            'nama' => 'Dwi Arya Putra',
-            'kelas_id' => 2
-        ]);
+        Siswa::factory()->count(10000)->create();
     }
 }
