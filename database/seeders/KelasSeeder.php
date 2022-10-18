@@ -16,32 +16,32 @@ class KelasSeeder extends Seeder
     {
         Kelas::create([
             'kelas' => '10',
-            'jurusan' => 'AKL 1'
+            'jurusan' => 'AKL1'
         ]);
 
         Kelas::create([
             'kelas' => '10',
-            'jurusan' => 'AKL 2'
+            'jurusan' => 'AKL2'
         ]);
 
         Kelas::create([
             'kelas' => '10',
-            'jurusan' => 'BDP 1'
+            'jurusan' => 'BDP1'
         ]);
 
         Kelas::create([
             'kelas' => '10',
-            'jurusan' => 'BDP 2'
+            'jurusan' => 'BDP2'
         ]);
 
         Kelas::create([
             'kelas' => '10',
-            'jurusan' => 'OTKP 1'
+            'jurusan' => 'OTKP1'
         ]);
 
         Kelas::create([
             'kelas' => '10',
-            'jurusan' => 'OTKP 2'
+            'jurusan' => 'OTKP2'
         ]);
 
         Kelas::create([
@@ -51,32 +51,32 @@ class KelasSeeder extends Seeder
 
         Kelas::create([
             'kelas' => '11',
-            'jurusan' => 'AKL 1'
+            'jurusan' => 'AKL1'
         ]);
 
         Kelas::create([
             'kelas' => '11',
-            'jurusan' => 'AKL 2'
+            'jurusan' => 'AKL2'
         ]);
 
         Kelas::create([
             'kelas' => '11',
-            'jurusan' => 'BDP 1'
+            'jurusan' => 'BDP1'
         ]);
 
         Kelas::create([
             'kelas' => '11',
-            'jurusan' => 'BDP 2'
+            'jurusan' => 'BDP2'
         ]);
 
         Kelas::create([
             'kelas' => '11',
-            'jurusan' => 'OTKP 1'
+            'jurusan' => 'OTKP1'
         ]);
 
         Kelas::create([
             'kelas' => '11',
-            'jurusan' => 'OTKP 2'
+            'jurusan' => 'OTKP2'
         ]);
 
         Kelas::create([
@@ -86,32 +86,32 @@ class KelasSeeder extends Seeder
 
         Kelas::create([
             'kelas' => '12',
-            'jurusan' => 'AKL 1'
+            'jurusan' => 'AKL1'
         ]);
 
         Kelas::create([
             'kelas' => '12',
-            'jurusan' => 'AKL 2'
+            'jurusan' => 'AKL2'
         ]);
 
         Kelas::create([
             'kelas' => '12',
-            'jurusan' => 'BDP 1'
+            'jurusan' => 'BDP1'
         ]);
 
         Kelas::create([
             'kelas' => '12',
-            'jurusan' => 'BDP 2'
+            'jurusan' => 'BDP2'
         ]);
 
         Kelas::create([
             'kelas' => '12',
-            'jurusan' => 'OTKP 1'
+            'jurusan' => 'OTKP1'
         ]);
 
         Kelas::create([
             'kelas' => '12',
-            'jurusan' => 'OTKP 2'
+            'jurusan' => 'OTKP2'
         ]);
 
         Kelas::create([

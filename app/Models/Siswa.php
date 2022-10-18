@@ -17,12 +17,12 @@ class Siswa extends Model
 
     public function kelas()
     {
-        return $this->hasOne(Kelas::class, 'id');
+        return $this->hasOne(Kelas::class, 'id', 'kelas_id');
     }
 
     public function absensi()
     {
-        return $this->belongsTo(Absensi::class);
+        return $this->belongsTo(Absensi::class, 'id');
     }
 
     public function pelanggar()

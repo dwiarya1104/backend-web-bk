@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\SiswaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,7 +18,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
+Route::post('login', [App\Http\Controllers\AuthController::class, 'login']);
+Route::middleware('auth:sanctum')->post('logout', [App\Http\Controllers\AuthController::class, 'logout']);
 // LIST PENGHARGAAN DAN PELANGGARAN
 Route::get('list-pelanggaran', [App\Http\Controllers\PelanggaranController::class, 'list_pelanggaran']);
 Route::get('list-penghargaan', [App\Http\Controllers\PenghargaanController::class, 'list_penghargaan']);
@@ -30,7 +30,12 @@ Route::get('top-prestasi', [App\Http\Controllers\PenghargaanController::class, '
 Route::post('tambah-pelanggar', [App\Http\Controllers\PelanggaranController::class, 'tambah_pelanggar']);
 Route::post('tambah-prestasi', [App\Http\Controllers\PenghargaanController::class, 'tambah_penghargaan']);
 
-Route::post('absensi', [App\Http\Controllers\AbsensiController::class, 'absensi']);
+Route::post('tambah-absensi', [App\Http\Controllers\AbsensiController::class, 'absensi']);
 
 Route::post('tambah-kelas', [App\Http\Controllers\KelasController::class, 'tambah_kelas']);
-Route::get('tes',[SiswaController::class,'tes']);
+
+Route::get('absen/bulan/{month}/{kelas}-{jurusan}', [App\Http\Controllers\AbsensiController::class, 'absen_perbulan']);
+Route::get('absen/tahun/{year}/{kelas}-{jurusan}', [App\Http\Controllers\AbsensiController::class, 'absen_pertahun']);
+Route::get('absen/semester/{semester}/{tahun_awal}-{tahun_akhir}/{kelas}-{jurusan}', [App\Http\Controllers\AbsensiController::class, 'absen_persemester']);
+
+Route::get('tes', [App\Http\Controllers\AbsensiController::class, 'tes']);
