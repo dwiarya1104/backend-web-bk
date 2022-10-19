@@ -39,3 +39,4 @@ Route::get('absen/tahun/{year}/{kelas}-{jurusan}', [App\Http\Controllers\Absensi
 Route::get('absen/semester/{semester}/{tahun_awal}-{tahun_akhir}/{kelas}-{jurusan}', [App\Http\Controllers\AbsensiController::class, 'absen_persemester']);
 
 Route::get('tes', [App\Http\Controllers\AbsensiController::class, 'tes']);
+Route::post('import', [App\Http\Controllers\SiswaController::class, 'import']);
