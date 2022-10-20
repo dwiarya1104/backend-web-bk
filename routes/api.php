@@ -28,11 +28,15 @@ Route::get('top-pelanggar', [App\Http\Controllers\PelanggaranController::class, 
 Route::get('top-prestasi', [App\Http\Controllers\PenghargaanController::class, 'top_penghargaan']);
 
 Route::post('tambah-pelanggar', [App\Http\Controllers\PelanggaranController::class, 'tambah_pelanggar']);
+Route::get('siswa/{nis}/point', [App\Http\Controllers\PelanggaranController::class, 'point_persiswa']);
 Route::post('tambah-prestasi', [App\Http\Controllers\PenghargaanController::class, 'tambah_penghargaan']);
 
 Route::post('tambah-absensi', [App\Http\Controllers\AbsensiController::class, 'absensi']);
 
+Route::get('kelas', [App\Http\Controllers\KelasController::class, 'kelas']);
 Route::post('tambah-kelas', [App\Http\Controllers\KelasController::class, 'tambah_kelas']);
+Route::put('{id}/edit-kelas', [App\Http\Controllers\KelasController::class, 'edit_kelas']);
+Route::delete('{id}/hapus-kelas', [App\Http\Controllers\KelasController::class, 'hapus_kelas']);
 
 Route::get('absen/bulan/{month}/{kelas}-{jurusan}', [App\Http\Controllers\AbsensiController::class, 'absen_perbulan']);
 Route::get('absen/tahun/{year}/{kelas}-{jurusan}', [App\Http\Controllers\AbsensiController::class, 'absen_pertahun']);
@@ -40,3 +44,4 @@ Route::get('absen/semester/{semester}/{tahun_awal}-{tahun_akhir}/{kelas}-{jurusa
 
 Route::get('tes', [App\Http\Controllers\AbsensiController::class, 'tes']);
 Route::post('import', [App\Http\Controllers\SiswaController::class, 'import']);
+Route::get('siswa', [App\Http\Controllers\SiswaController::class, 'data_siswa']);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ListPelanggaran;
 use App\Models\Pelanggar;
 use App\Models\Point;
+use App\Models\Siswa;
 use Illuminate\Http\Request;
 
 class PelanggaranController extends Controller
@@ -68,6 +69,55 @@ class PelanggaranController extends Controller
         }
         return response()->json([
             "data" => $pelanggar
+        ]);
+    }
+    public function point_persiswa($nis)
+    {
+        $siswa = Siswa::with('point', 'pelanggar', 'prestasi')->where('nis', $nis)->first();
+        if (!$siswa) {
+            return response()->json([
+                'message' => 'Siswa tidak ditemukan'
+            ], 404);
+        }
+        $pelanggar = Pelanggar::where('siswa_id', $siswa->id)->get();
+        $data = [];
+        foreach ($pelanggar as $value) {
+            $get_point = ListPelanggaran::where('id', $value->list_pelanggaran_id)->first();
+            $total_pelanggaran = Point::where('siswa_id', $value->siswa_id)->sum('point_pelanggaran');
+            $total_penghargaan = Point::where('siswa_id', $value->siswa_id)->sum('point_penghargaan');
+            $datas['id'] = $value->id;
+            $datas['nis'] = $nis;
+            $datas['nama'] = $siswa->nama;
+            $datas['kelas'] = $siswa->kelas->kelas . ' ' . $siswa->kelas->jurusan;
+            $datas['rekap'] = [
+                'tanggal' => $value->created_at->format('d-m-Y'),
+                'jenis' => $get_point->id,
+                'point' => $get_point->point
+            ];
+            $datas['kumulatif'] = [
+                'point_pelanggaran' => $total_pelanggaran,
+                'point_penghargaan' => $total_penghargaan,
+                'total' => $total_pelanggaran - $total_penghargaan
+            ];
+            if ($total_pelanggaran <= 75) {
+                $datas['tindakan'] = 'Teguran/Pembinaan';
+            }
+            if ($total_pelanggaran >= 76 && $total_pelanggaran <= 100) {
+                $datas['tindakan'] = 'SP1';
+            }
+            if ($total_pelanggaran >= 101 && $total_pelanggaran <= 200) {
+                $datas['tindakan'] = 'SP2';
+            }
+            if ($total_pelanggaran >= 201 && $total_pelanggaran <= 300) {
+                $datas['tindakan'] = 'SP3';
+            }
+            if ($total_pelanggaran > 300) {
+                $datas['tindakan'] = 'DO/Dikeluarkan';
+            }
+            $data[] = $datas;
+        }
+        return response()->json([
+            'data' => $data,
         ]);
     }
 }

@@ -27,16 +27,16 @@ class Siswa extends Model
 
     public function pelanggar()
     {
-        return $this->belongsTo(Pelanggar::class);
+        return $this->belongsTo(Pelanggar::class, 'id');
     }
 
     public function point()
     {
-        return $this->belongsTo(Point::class);
+        return $this->belongsTo(Point::class, 'id');
     }
 
     public function prestasi()
     {
-        return $this->belongsTo(Prestasi::class);
+        return $this->belongsTo(Prestasi::class, 'id');
     }
 }

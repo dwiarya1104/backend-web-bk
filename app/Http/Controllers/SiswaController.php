@@ -21,4 +21,20 @@ class SiswaController extends Controller
             return response()->json(['message' => 'Gagal Import Siswa!, Nama Jurusan Jangan Pakai Spasi']);
         }
     }
+
+    public function data_siswa()
+    {
+        $siswa = Siswa::get();
+        $data = [];
+        foreach ($siswa as $value) {
+            $datas['id'] = $value->id;
+            $datas['nis'] = $value->nis;
+            $datas['nama'] = $value->nama;
+            $datas['kelas'] = $value->kelas->kelas . ' ' . $value->kelas->jurusan;
+            $data[] = $datas;
+        }
+        return response()->json([
+            "data" => $data
+        ]);
+    }
 }
