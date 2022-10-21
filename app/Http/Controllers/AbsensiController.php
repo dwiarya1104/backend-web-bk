@@ -84,22 +84,22 @@ class AbsensiController extends Controller
                     $datas['keterangan'] = [
                         'A' => $value->where('siswa_id', $values->id)
                             ->where('keterangan', 'Alfa')
-                            ->whereMonth('created_at', $month)
+                            ->whereMonth('created_at', $bulan)
                             ->count(),
 
                         'H' => $value->where('siswa_id', $values->id)
                             ->where('keterangan', 'Hadir')
-                            ->whereMonth('created_at', $month)
+                            ->whereMonth('created_at', $bulan)
                             ->count(),
 
                         'S' => $value->where('siswa_id', $values->id)
                             ->where('keterangan', 'Sakit')
-                            ->whereMonth('created_at', $month)
+                            ->whereMonth('created_at', $bulan)
                             ->count(),
 
                         'T' => $value->where('siswa_id', $values->id)
                             ->where('keterangan', 'Terlambat')
-                            ->whereMonth('created_at', $month)
+                            ->whereMonth('created_at', $bulan)
                             ->count(),
 
                     ];
