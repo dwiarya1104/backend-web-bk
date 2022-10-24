@@ -57,7 +57,7 @@ class AbsensiController extends Controller
         ]);
     }
 
-    public function absen_perbulan($month, $kelas, $jurusan)
+    public function absen_perbulan($month, $tahun_awal, $tahun_akhir, $kelas, $jurusan)
     {
         $kls = Kelas::where('kelas', $kelas)
             ->where('jurusan', $jurusan)
@@ -69,48 +69,113 @@ class AbsensiController extends Controller
 
         $data = [];
         foreach ($siswa as $key => $siswas) {
-            $bulan = date('m', strtotime($month));
-            $absensi = Absensi::with('siswas')
-                ->where('siswa_id', $siswas->id)
-                ->whereMonth('created_at', $bulan)
-                ->groupBy('siswa_id')
-                ->get();
-            foreach ($absensi as $value) {
-                foreach ($value->siswas as $values) {
-                    $datas['id'] = $value->id;
-                    $datas['nis'] = $values->nis;
-                    $datas['nama'] = $values->nama;
-                    $datas['kelas'] = $values->kelas->kelas . '-' . $values->kelas->jurusan;
-                    $datas['keterangan'] = [
-                        'A' => $value->where('siswa_id', $values->id)
-                            ->where('keterangan', 'Alfa')
-                            ->whereMonth('created_at', $bulan)
-                            ->count(),
+            $bulan_indo  = array(
+                '',
+                'januari',
+                'februari',
+                'maret',
+                'april',
+                'mei',
+                'juni',
+                'juli',
+                'agustus',
+                'september',
+                'oktober',
+                'november',
+                'desember'
+            );
+            $nomor_bulan = array_search($month, $bulan_indo);
+            if ($nomor_bulan <= 6) {
+                $absensi = Absensi::with('siswas')
+                    ->where('siswa_id', $siswas->id)
+                    ->whereMonth('created_at', $nomor_bulan)
+                    ->whereYear('created_at', $tahun_akhir)
+                    ->groupBy('siswa_id')
+                    ->get();
+                foreach ($absensi as $value) {
+                    foreach ($value->siswas as $values) {
+                        $datas['id'] = $value->id;
+                        $datas['nis'] = $values->nis;
+                        $datas['nama'] = $values->nama;
+                        $datas['kelas'] = $values->kelas->kelas . '-' . $values->kelas->jurusan;
+                        $datas['keterangan'] = [
+                            'A' => $value->where('siswa_id', $values->id)
+                                ->where('keterangan', 'Alfa')
+                                ->whereMonth('created_at', $nomor_bulan)
+                                ->whereYear('created_at', $tahun_akhir)
+                                ->count(),
 
-                        'H' => $value->where('siswa_id', $values->id)
-                            ->where('keterangan', 'Hadir')
-                            ->whereMonth('created_at', $bulan)
-                            ->count(),
+                            'H' => $value->where('siswa_id', $values->id)
+                                ->where('keterangan', 'Hadir')
+                                ->whereMonth('created_at', $nomor_bulan)
+                                ->whereYear('created_at', $tahun_akhir)
+                                ->count(),
 
-                        'S' => $value->where('siswa_id', $values->id)
-                            ->where('keterangan', 'Sakit')
-                            ->whereMonth('created_at', $bulan)
-                            ->count(),
+                            'S' => $value->where('siswa_id', $values->id)
+                                ->where('keterangan', 'Sakit')
+                                ->whereMonth('created_at', $nomor_bulan)
+                                ->whereYear('created_at', $tahun_akhir)
+                                ->count(),
 
-                        'T' => $value->where('siswa_id', $values->id)
-                            ->where('keterangan', 'Terlambat')
-                            ->whereMonth('created_at', $bulan)
-                            ->count(),
+                            'T' => $value->where('siswa_id', $values->id)
+                                ->where('keterangan', 'Terlambat')
+                                ->whereMonth('created_at', $nomor_bulan)
+                                ->whereYear('created_at', $tahun_akhir)
+                                ->count(),
 
-                    ];
-                    $data[] = $datas;
+                        ];
+                        $data[] = $datas;
+                    }
+                }
+            }
+            if ($nomor_bulan >= 7 && $nomor_bulan <= 12) {
+                $absensi = Absensi::with('siswas')
+                    ->where('siswa_id', $siswas->id)
+                    ->whereMonth('created_at', $nomor_bulan)
+                    ->whereYear('created_at', $tahun_awal)
+                    ->groupBy('siswa_id')
+                    ->get();
+                foreach ($absensi as $value) {
+                    foreach ($value->siswas as $values) {
+                        $datas['id'] = $value->id;
+                        $datas['nis'] = $values->nis;
+                        $datas['nama'] = $values->nama;
+                        $datas['kelas'] = $values->kelas->kelas . '-' . $values->kelas->jurusan;
+                        $datas['keterangan'] = [
+                            'A' => $value->where('siswa_id', $values->id)
+                                ->where('keterangan', 'Alfa')
+                                ->whereMonth('created_at', $nomor_bulan)
+                                ->whereYear('created_at', $tahun_awal)
+                                ->count(),
+
+                            'H' => $value->where('siswa_id', $values->id)
+                                ->where('keterangan', 'Hadir')
+                                ->whereMonth('created_at', $nomor_bulan)
+                                ->whereYear('created_at', $tahun_awal)
+                                ->count(),
+
+                            'S' => $value->where('siswa_id', $values->id)
+                                ->where('keterangan', 'Sakit')
+                                ->whereMonth('created_at', $nomor_bulan)
+                                ->whereYear('created_at', $tahun_awal)
+                                ->count(),
+
+                            'T' => $value->where('siswa_id', $values->id)
+                                ->where('keterangan', 'Terlambat')
+                                ->whereMonth('created_at', $nomor_bulan)
+                                ->whereYear('created_at', $tahun_awal)
+                                ->count(),
+
+                        ];
+                        $data[] = $datas;
+                    }
                 }
             }
         }
 
         return response()->json([
             'data' => $data,
-            'message' => 'Rekapan absen bulan' . ' ' . ucfirst($month)
+            'message' => 'Rekapan absen bulan' . ' ' . ucfirst($month) . ' ' . 'tahun ajaran' . ' ' . $tahun_awal . '/' . $tahun_akhir
         ]);
     }
 

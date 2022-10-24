@@ -38,7 +38,7 @@ Route::post('tambah-kelas', [App\Http\Controllers\KelasController::class, 'tamba
 Route::put('{id}/edit-kelas', [App\Http\Controllers\KelasController::class, 'edit_kelas']);
 Route::delete('{id}/hapus-kelas', [App\Http\Controllers\KelasController::class, 'hapus_kelas']);
 
-Route::get('absen/bulan/{month}/{kelas}-{jurusan}', [App\Http\Controllers\AbsensiController::class, 'absen_perbulan']);
+Route::get('absen/bulan/{month}/{tahun_awal}-{tahun_akhir}/{kelas}-{jurusan}', [App\Http\Controllers\AbsensiController::class, 'absen_perbulan']);
 Route::get('absen/tahun/{year}/{kelas}-{jurusan}', [App\Http\Controllers\AbsensiController::class, 'absen_pertahun']);
 Route::get('absen/semester/{semester}/{tahun_awal}-{tahun_akhir}/{kelas}-{jurusan}', [App\Http\Controllers\AbsensiController::class, 'absen_persemester']);
 
