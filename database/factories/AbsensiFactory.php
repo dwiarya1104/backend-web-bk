@@ -15,7 +15,7 @@ class AbsensiFactory extends Factory
     {
         return [
             'siswa_id' => rand(1, 756),
-            'keterangan' => $this->faker->randomElement(['Alfa', 'Hadir', 'Sakit', 'Terlambat']),
-        ];
+            'keterangan' => $this->faker->randomElement(['Alfa', 'Hadir', 'Sakit', 'Terlambat', 'Izin']),
+        ];  
     }
 }

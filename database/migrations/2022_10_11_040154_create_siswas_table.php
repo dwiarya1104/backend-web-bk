@@ -18,6 +18,7 @@ class CreateSiswasTable extends Migration
             $table->string('nis');
             $table->string('nama');
             $table->foreignId('kelas_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->enum('jk', ['Laki-laki', 'Perempuan']);
             $table->timestamps();
         });
     }

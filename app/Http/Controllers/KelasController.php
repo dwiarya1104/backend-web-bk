@@ -2,16 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Absensi;
 use App\Models\Kelas;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class KelasController extends Controller
 {
     public function kelas()
     {
         $kelas = Kelas::get();
+        $tes = Absensi::select(
+            DB::raw("YEAR(created_at) as year")
+        )
+            ->orderBy('created_at', 'ASC')
+            ->groupBy('year')
+            ->get();
+
         return response()->json([
-            "data" => $kelas
+            "data" => $kelas,
+            "tes" => $tes
         ]);
     }
 

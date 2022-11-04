@@ -65,6 +65,7 @@ class AbsensiController extends Controller
 
         $siswa = Siswa::with('kelas', 'absensi')
             ->where('kelas_id', $kls->id)
+            ->orderBy('nama', 'ASC')
             ->get();
 
         $data = [];
@@ -98,6 +99,7 @@ class AbsensiController extends Controller
                         $datas['nis'] = $values->nis;
                         $datas['nama'] = $values->nama;
                         $datas['kelas'] = $values->kelas->kelas . '-' . $values->kelas->jurusan;
+                        $datas['jk'] = $values->jk;
                         $datas['keterangan'] = [
                             'A' => $value->where('siswa_id', $values->id)
                                 ->where('keterangan', 'Alfa')
@@ -119,6 +121,11 @@ class AbsensiController extends Controller
 
                             'T' => $value->where('siswa_id', $values->id)
                                 ->where('keterangan', 'Terlambat')
+                                ->whereMonth('created_at', $nomor_bulan)
+                                ->whereYear('created_at', $tahun_akhir)
+                                ->count(),
+                            'I' => $value->where('siswa_id', $values->id)
+                                ->where('keterangan', 'Izin')
                                 ->whereMonth('created_at', $nomor_bulan)
                                 ->whereYear('created_at', $tahun_akhir)
                                 ->count(),
@@ -141,6 +148,7 @@ class AbsensiController extends Controller
                         $datas['nis'] = $values->nis;
                         $datas['nama'] = $values->nama;
                         $datas['kelas'] = $values->kelas->kelas . '-' . $values->kelas->jurusan;
+                        $datas['jk'] = $values->jk;
                         $datas['keterangan'] = [
                             'A' => $value->where('siswa_id', $values->id)
                                 ->where('keterangan', 'Alfa')
@@ -162,6 +170,11 @@ class AbsensiController extends Controller
 
                             'T' => $value->where('siswa_id', $values->id)
                                 ->where('keterangan', 'Terlambat')
+                                ->whereMonth('created_at', $nomor_bulan)
+                                ->whereYear('created_at', $tahun_awal)
+                                ->count(),
+                            'I' => $value->where('siswa_id', $values->id)
+                                ->where('keterangan', 'Izin')
                                 ->whereMonth('created_at', $nomor_bulan)
                                 ->whereYear('created_at', $tahun_awal)
                                 ->count(),
@@ -187,6 +200,7 @@ class AbsensiController extends Controller
 
         $siswa = Siswa::with('kelas', 'absensi')
             ->where('kelas_id', $kls->id)
+            ->orderBy('nama', 'ASC')
             ->get();
 
         $data = [];
@@ -202,6 +216,7 @@ class AbsensiController extends Controller
                     $datas['nis'] = $values->nis;
                     $datas['nama'] = $values->nama;
                     $datas['kelas'] = $values->kelas->kelas . '-' . $values->kelas->jurusan;
+                    $datas['jk'] = $values->jk;
                     $datas['keterangan'] = [
                         'A' => $value->where('siswa_id', $values->id)
                             ->where('keterangan', 'Alfa')
@@ -220,6 +235,11 @@ class AbsensiController extends Controller
 
                         'T' => $value->where('siswa_id', $values->id)
                             ->where('keterangan', 'Terlambat')
+                            ->whereYear('created_at', $year)
+                            ->count(),
+
+                        'I' => $value->where('siswa_id', $values->id)
+                            ->where('keterangan', 'Izin')
                             ->whereYear('created_at', $year)
                             ->count()
                     ];
@@ -241,6 +261,7 @@ class AbsensiController extends Controller
 
         $siswa = Siswa::with('kelas',  'absensi')
             ->where('kelas_id', $kls->id)
+            ->orderBy('nama', 'ASC')
             ->get();
 
         if ($semester == 'ganjil') {
@@ -261,6 +282,7 @@ class AbsensiController extends Controller
                         $datas['nis'] = $values->nis;
                         $datas['nama'] = $values->nama;
                         $datas['kelas'] = $values->kelas->kelas . '-' . $values->kelas->jurusan;
+                        $datas['jk'] = $values->jk;
                         $datas['keterangan'] = [
                             'A' => $value->where('siswa_id', $values->id)
                                 ->where('keterangan', 'Alfa')
@@ -282,6 +304,12 @@ class AbsensiController extends Controller
 
                             'T' => $value->where('siswa_id', $values->id)
                                 ->where('keterangan', 'Terlambat')
+                                ->whereYear('created_at', $tahun_awal)
+                                ->whereBetween('created_at', [$start, $end])
+                                ->count(),
+
+                            'I' => $value->where('siswa_id', $values->id)
+                                ->where('keterangan', 'Izin')
                                 ->whereYear('created_at', $tahun_awal)
                                 ->whereBetween('created_at', [$start, $end])
                                 ->count()
@@ -309,6 +337,7 @@ class AbsensiController extends Controller
                         $datas['nis'] = $values->nis;
                         $datas['nama'] = $values->nama;
                         $datas['kelas'] = $values->kelas->kelas . '-' . $values->kelas->jurusan;
+                        $datas['jk'] = $values->jk;
                         $datas['keterangan'] = [
                             'A' => $value->where('siswa_id', $values->id)
                                 ->where('keterangan', 'Alfa')
@@ -330,6 +359,12 @@ class AbsensiController extends Controller
 
                             'T' => $value->where('siswa_id', $values->id)
                                 ->where('keterangan', 'Terlambat')
+                                ->whereYear('created_at', $tahun_akhir)
+                                ->whereBetween('created_at', [$start, $end])
+                                ->count(),
+
+                            'I' => $value->where('siswa_id', $values->id)
+                                ->where('keterangan', 'Izin')
                                 ->whereYear('created_at', $tahun_akhir)
                                 ->whereBetween('created_at', [$start, $end])
                                 ->count()

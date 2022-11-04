@@ -45,3 +45,4 @@ Route::get('absen/semester/{semester}/{tahun_awal}-{tahun_akhir}/{kelas}-{jurusa
 Route::get('tes', [App\Http\Controllers\AbsensiController::class, 'tes']);
 Route::post('import', [App\Http\Controllers\SiswaController::class, 'import']);
 Route::get('siswa', [App\Http\Controllers\SiswaController::class, 'data_siswa']);
+Route::put('edit-siswa',[App\Http\Controllers\SiswaController::class,'edit_siswa']);

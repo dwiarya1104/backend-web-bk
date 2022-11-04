@@ -17,7 +17,8 @@ class SiswaFactory extends Factory
         return [
             'nis' => rand(11111, 999999),
             'nama' => $this->faker->name(),
-            'kelas_id' => rand(1, 21)
+            'kelas_id' => rand(1, 21),
+            'jk' => $this->faker->randomElement(['Laki-laki', 'Perempuan']),
         ];
     }
 }
