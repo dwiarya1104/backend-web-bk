@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kelas;
 use App\Models\ListPelanggaran;
 use App\Models\Pelanggar;
 use App\Models\Point;
@@ -85,6 +86,7 @@ class PelanggaranController extends Controller
             $get_point = ListPelanggaran::where('id', $value->list_pelanggaran_id)->first();
             $total_pelanggaran = Point::where('siswa_id', $value->siswa_id)->sum('point_pelanggaran');
             $total_penghargaan = Point::where('siswa_id', $value->siswa_id)->sum('point_penghargaan');
+            $total_seluruh = $total_pelanggaran - $total_penghargaan;
             $datas['id'] = $value->id;
             $datas['nis'] = $nis;
             $datas['nama'] = $siswa->nama;
@@ -97,21 +99,24 @@ class PelanggaranController extends Controller
             $datas['kumulatif'] = [
                 'point_pelanggaran' => $total_pelanggaran,
                 'point_penghargaan' => $total_penghargaan,
-                'total' => $total_pelanggaran - $total_penghargaan
+                'total' => $total_seluruh
             ];
-            if ($total_pelanggaran <= 75) {
+            if ($total_seluruh == 0) {
+                $datas['tindakan'] = null;
+            }
+            if ($total_seluruh > 0 && $total_seluruh <= 75) {
                 $datas['tindakan'] = 'Teguran/Pembinaan';
             }
-            if ($total_pelanggaran >= 76 && $total_pelanggaran <= 100) {
+            if ($total_seluruh >= 76 && $total_seluruh <= 100) {
                 $datas['tindakan'] = 'SP1';
             }
-            if ($total_pelanggaran >= 101 && $total_pelanggaran <= 200) {
+            if ($total_seluruh >= 101 && $total_seluruh <= 200) {
                 $datas['tindakan'] = 'SP2';
             }
-            if ($total_pelanggaran >= 201 && $total_pelanggaran <= 300) {
+            if ($total_seluruh >= 201 && $total_seluruh <= 300) {
                 $datas['tindakan'] = 'SP3';
             }
-            if ($total_pelanggaran > 300) {
+            if ($total_seluruh > 300) {
                 $datas['tindakan'] = 'DO/Dikeluarkan';
             }
             $data[] = $datas;
@@ -119,5 +124,52 @@ class PelanggaranController extends Controller
         return response()->json([
             'data' => $data,
         ]);
+    }
+
+    public function point_perkelas($kelas, $jurusan)
+    {
+        $kelas = Kelas::where('kelas', $kelas)
+            ->where('jurusan', $jurusan)
+            ->first();
+
+        $siswa = Siswa::with('kelas',  'absensi')
+            ->where('kelas_id', $kelas->id)
+            ->orderBy('nama', 'ASC')
+            ->get();
+
+        $data = [];
+        foreach ($siswa as $key => $value) {
+            $pelanggar = Pelanggar::where('siswa_id', $value->id)
+                ->groupBy('siswa_id')
+                ->get();
+            foreach ($pelanggar as $p) {
+                $total_pelanggaran = Point::where('siswa_id', $p->siswa_id)->sum('point_pelanggaran');
+                $total_penghargaan = Point::where('siswa_id', $p->siswa_id)->sum('point_penghargaan');
+                $total_seluruh = $total_pelanggaran - $total_penghargaan;
+                $datas['nama'] = $value->nama;
+                $datas['jk'] = $value->jk;
+                $datas['kumulatif'] = $total_seluruh;
+                if ($total_seluruh == 0) {
+                    $datas['tindakan'] = null;
+                }
+                if ($total_seluruh > 0 && $total_seluruh <= 75) {
+                    $datas['tindakan'] = 'Teguran/Pembinaan';
+                }
+                if ($total_seluruh >= 76 && $total_seluruh <= 100) {
+                    $datas['tindakan'] = 'SP1';
+                }
+                if ($total_seluruh >= 101 && $total_seluruh <= 200) {
+                    $datas['tindakan'] = 'SP2';
+                }
+                if ($total_seluruh >= 201 && $total_seluruh <= 300) {
+                    $datas['tindakan'] = 'SP3';
+                }
+                if ($total_seluruh > 300) {
+                    $datas['tindakan'] = 'DO/Dikeluarkan';
+                }
+                $data[] = $datas;
+            }
+        }
+        return response()->json(['data' => $data]);
     }
 }
