@@ -100,37 +100,57 @@ class AbsensiController extends Controller
                         $datas['nama'] = $values->nama;
                         $datas['kelas'] = $values->kelas->kelas . '-' . $values->kelas->jurusan;
                         $datas['jk'] = $values->jk;
-                        $datas['keterangan'] = [
-                            'A' => $value->where('siswa_id', $values->id)
-                                ->where('keterangan', 'Alfa')
-                                ->whereMonth('created_at', $nomor_bulan)
-                                ->whereYear('created_at', $tahun_akhir)
-                                ->count(),
-
-                            'H' => $value->where('siswa_id', $values->id)
-                                ->where('keterangan', 'Hadir')
-                                ->whereMonth('created_at', $nomor_bulan)
-                                ->whereYear('created_at', $tahun_akhir)
-                                ->count(),
-
-                            'S' => $value->where('siswa_id', $values->id)
-                                ->where('keterangan', 'Sakit')
-                                ->whereMonth('created_at', $nomor_bulan)
-                                ->whereYear('created_at', $tahun_akhir)
-                                ->count(),
-
-                            'T' => $value->where('siswa_id', $values->id)
-                                ->where('keterangan', 'Terlambat')
-                                ->whereMonth('created_at', $nomor_bulan)
-                                ->whereYear('created_at', $tahun_akhir)
-                                ->count(),
-                            'I' => $value->where('siswa_id', $values->id)
-                                ->where('keterangan', 'Izin')
-                                ->whereMonth('created_at', $nomor_bulan)
-                                ->whereYear('created_at', $tahun_akhir)
-                                ->count(),
-
-                        ];
+                        $kehadiran = Absensi::where('siswa_id', $values->id)->get();
+                        $tes = [];
+                        foreach ($kehadiran as $key => $kh) {
+                            if ($kh->keterangan == "Alfa") {
+                                $tester = [
+                                    'A' => true,
+                                    'H' => false,
+                                    'S' => false,
+                                    'T' => false,
+                                    'I' => false
+                                ];
+                            }
+                            if ($kh->keterangan == "Hadir") {
+                                $tester = [
+                                    'A' => false,
+                                    'H' => true,
+                                    'S' => false,
+                                    'T' => false,
+                                    'I' => false
+                                ];
+                            }
+                            if ($kh->keterangan == "Sakit") {
+                                $tester = [
+                                    'A' => false,
+                                    'H' => false,
+                                    'S' => true,
+                                    'T' => false,
+                                    'I' => false
+                                ];
+                            }
+                            if ($kh->keterangan == "Terlambat") {
+                                $tester = [
+                                    'A' => false,
+                                    'H' => false,
+                                    'S' => false,
+                                    'T' => true,
+                                    'I' => false
+                                ];
+                            }
+                            if ($kh->keterangan == "Izin") {
+                                $tester = [
+                                    'A' => false,
+                                    'H' => true,
+                                    'S' => false,
+                                    'T' => false,
+                                    'I' => true
+                                ];
+                            }
+                            $tes[] = $tester;
+                            $datas['days'] = $tes;
+                        }
                         $data[] = $datas;
                     }
                 }
@@ -149,37 +169,58 @@ class AbsensiController extends Controller
                         $datas['nama'] = $values->nama;
                         $datas['kelas'] = $values->kelas->kelas . '-' . $values->kelas->jurusan;
                         $datas['jk'] = $values->jk;
-                        $datas['keterangan'] = [
-                            'A' => $value->where('siswa_id', $values->id)
-                                ->where('keterangan', 'Alfa')
-                                ->whereMonth('created_at', $nomor_bulan)
-                                ->whereYear('created_at', $tahun_awal)
-                                ->count(),
+                        $kehadiran = Absensi::where('siswa_id', $values->id)->get();
+                        $tes = [];
+                        foreach ($kehadiran as $key => $kh) {
+                            if ($kh->keterangan == "Alfa") {
+                                $tester = [
+                                    'A' => true,
+                                    'H' => false,
+                                    'S' => false,
+                                    'T' => false,
+                                    'I' => false
+                                ];
+                            }
 
-                            'H' => $value->where('siswa_id', $values->id)
-                                ->where('keterangan', 'Hadir')
-                                ->whereMonth('created_at', $nomor_bulan)
-                                ->whereYear('created_at', $tahun_awal)
-                                ->count(),
-
-                            'S' => $value->where('siswa_id', $values->id)
-                                ->where('keterangan', 'Sakit')
-                                ->whereMonth('created_at', $nomor_bulan)
-                                ->whereYear('created_at', $tahun_awal)
-                                ->count(),
-
-                            'T' => $value->where('siswa_id', $values->id)
-                                ->where('keterangan', 'Terlambat')
-                                ->whereMonth('created_at', $nomor_bulan)
-                                ->whereYear('created_at', $tahun_awal)
-                                ->count(),
-                            'I' => $value->where('siswa_id', $values->id)
-                                ->where('keterangan', 'Izin')
-                                ->whereMonth('created_at', $nomor_bulan)
-                                ->whereYear('created_at', $tahun_awal)
-                                ->count(),
-
-                        ];
+                            if ($kh->keterangan == "Hadir") {
+                                $tester = [
+                                    'A' => false,
+                                    'H' => true,
+                                    'S' => false,
+                                    'T' => false,
+                                    'I' => false
+                                ];
+                            }
+                            if ($kh->keterangan == "Sakit") {
+                                $tester = [
+                                    'A' => false,
+                                    'H' => false,
+                                    'S' => true,
+                                    'T' => false,
+                                    'I' => false
+                                ];
+                            }
+                            if ($kh->keterangan == "Terlambat") {
+                                $tester = [
+                                    'A' => false,
+                                    'H' => false,
+                                    'S' => false,
+                                    'T' => true,
+                                    'I' => false
+                                ];
+                            }
+                            if ($kh->keterangan == "Izin") {
+                                $tester = [
+                                    'A' => false,
+                                    'H' => true,
+                                    'S' => false,
+                                    'T' => false,
+                                    'I' => true
+                                ];
+                            }
+                            $tes[] = $tester;
+                            $datas['days'] = $tes;
+                        }
                         $data[] = $datas;
                     }
                 }
@@ -379,6 +420,49 @@ class AbsensiController extends Controller
             'data' => $data,
             $start, $end,
             'message' => 'Rekapan Semester' . ' ' . $semester . ' ' . 'tahun ajaran'  . ' ' . $tahun_awal . '/' . $tahun_akhir
+        ]);
+    }
+
+    public function total_absen_sehari()
+    {
+        $absensi = Absensi::orderByRaw("FIELD(keterangan,'Hadir','Izin','Sakit','Terlambat','Alfa')")
+            ->groupBy('keterangan')
+            ->get();
+        $data = [];
+        foreach ($absensi as $key => $value) {
+            $datas['keterangan'] = $value->keterangan;
+            if ($value->keterangan == "Hadir") {
+                $datas['siswa'] = $value->where('keterangan', 'Hadir')
+                    ->whereDate('created_at', date('Y-m-d'))
+                    ->count();
+            }
+            if ($value->keterangan == "Izin") {
+                $datas['siswa'] = $value->where('keterangan', 'Izin')
+                    ->whereDate('created_at', date('Y-m-d'))
+                    ->count();
+            }
+            if ($value->keterangan == "Sakit") {
+                $datas['siswa'] = $value->where('keterangan', 'Sakit')
+                    ->whereDate('created_at', date('Y-m-d'))
+                    ->count();
+            }
+            if ($value->keterangan == "Terlambat") {
+                $datas['siswa'] = $value->where('keterangan', 'Terlambat')
+                    ->whereDate('created_at', date('Y-m-d'))
+                    ->count();
+            }
+            if ($value->keterangan == "Alfa") {
+                $datas['siswa'] = $value->where('keterangan', 'Alfa')
+                    ->whereDate('created_at', date('Y-m-d'))
+                    ->count();
+            }
+            $datas['tanggal'] = date('d F Y');
+            $data[] = $datas;
+        }
+        return response()->json([
+            "status" => "success",
+            "message" => "Get today presents datas successfully",
+            "data" => $data
         ]);
     }
 }

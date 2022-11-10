@@ -94,6 +94,7 @@ class PelanggaranController extends Controller
             $datas['rekap'] = [
                 'tanggal' => $value->created_at->format('d-m-Y'),
                 'jenis' => $get_point->id,
+                'pelanggaran' => $get_point->pelanggaran,
                 'point' => $get_point->point
             ];
             $datas['kumulatif'] = [
