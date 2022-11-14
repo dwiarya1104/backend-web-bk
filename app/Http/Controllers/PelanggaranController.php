@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Kelas;
 use App\Models\ListPelanggaran;
+use App\Models\ListPenghargaan;
 use App\Models\Pelanggar;
 use App\Models\Point;
+use App\Models\Prestasi;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 
@@ -80,10 +82,9 @@ class PelanggaranController extends Controller
                 'message' => 'Siswa tidak ditemukan'
             ], 404);
         }
-        $pelanggar = Pelanggar::where('siswa_id', $siswa->id)->get();
+        $pelanggar = Pelanggar::groupBy('siswa_id')->where('siswa_id', $siswa->id)->get();
         $data = [];
         foreach ($pelanggar as $value) {
-            $get_point = ListPelanggaran::where('id', $value->list_pelanggaran_id)->first();
             $total_pelanggaran = Point::where('siswa_id', $value->siswa_id)->sum('point_pelanggaran');
             $total_penghargaan = Point::where('siswa_id', $value->siswa_id)->sum('point_penghargaan');
             $total_seluruh = $total_pelanggaran - $total_penghargaan;
@@ -91,12 +92,32 @@ class PelanggaranController extends Controller
             $datas['nis'] = $nis;
             $datas['nama'] = $siswa->nama;
             $datas['kelas'] = $siswa->kelas->kelas . ' ' . $siswa->kelas->jurusan;
-            $datas['rekap'] = [
-                'tanggal' => $value->created_at->format('d-m-Y'),
-                'jenis' => $get_point->id,
-                'pelanggaran' => $get_point->pelanggaran,
-                'point' => $get_point->point
-            ];
+            $rekap_pelanggaran = Pelanggar::where('siswa_id', $value->siswa_id)->get();
+            $array_pelanggar = [];
+            foreach ($rekap_pelanggaran as $key => $rp) {
+                $get_pelanggaran = ListPelanggaran::where('id', $rp->list_pelanggaran_id)->first();
+                $data_pelanggar = [
+                    'tanggal' => $rp->created_at->format('d-m-Y'),
+                    'jenis' => $get_pelanggaran->id,
+                    'pelanggaran' => $get_pelanggaran->pelanggaran,
+                    'point' => $get_pelanggaran->point
+                ];
+                $array_pelanggar[] = $data_pelanggar;
+                $datas['rekap_pelanggaran'] = $array_pelanggar;
+            }
+            $rekap_prestasi = Prestasi::where('siswa_id', $value->id)->get();
+            $array_penghargaan = [];
+            foreach ($rekap_prestasi as $key => $rs) {
+                $get_penghargaan = ListPenghargaan::where('id', $rs->list_penghargaan_id)->first();
+                $data_prestasi = [
+                    'tanggal' => $rs->created_at->format('d-m-Y'),
+                    'jenis' => $get_penghargaan->id,
+                    'pelanggaran' => $get_penghargaan->penghargaan,
+                    'point' => $get_penghargaan->point
+                ];
+                $array_penghargaan[] = $data_prestasi;
+                $datas['rekap_penghargaan'] = $array_penghargaan;
+            }
             $datas['kumulatif'] = [
                 'point_pelanggaran' => $total_pelanggaran,
                 'point_penghargaan' => $total_penghargaan,
