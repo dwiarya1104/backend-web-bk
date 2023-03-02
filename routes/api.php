@@ -23,6 +23,8 @@ Route::middleware('auth:sanctum')->post('logout', [App\Http\Controllers\AuthCont
 // LIST PENGHARGAAN DAN PELANGGARAN
 Route::get('list-pelanggaran', [App\Http\Controllers\PelanggaranController::class, 'list_pelanggaran']);
 Route::get('list-penghargaan', [App\Http\Controllers\PenghargaanController::class, 'list_penghargaan']);
+Route::delete('hapus-pelanggaran/{id}', [App\Http\Controllers\PelanggaranController::class, 'hapus_pelanggaran']);
+Route::delete('hapus-penghargaan/{id}', [App\Http\Controllers\PenghargaanController::class, 'hapus_penghargaan']);
 
 Route::get('top-pelanggar', [App\Http\Controllers\PelanggaranController::class, 'top_pelanggar']);
 Route::get('top-prestasi', [App\Http\Controllers\PenghargaanController::class, 'top_penghargaan']);
@@ -48,3 +50,5 @@ Route::get('absen/semester/{semester}/{tahun_awal}-{tahun_akhir}/{kelas}-{jurusa
 Route::post('import', [App\Http\Controllers\SiswaController::class, 'import']);
 Route::get('siswa', [App\Http\Controllers\SiswaController::class, 'data_siswa']);
 Route::put('edit-siswa', [App\Http\Controllers\SiswaController::class, 'edit_siswa']);
+Route::get('siswa/{kelas}-{jurusan}', [App\Http\Controllers\SiswaController::class, 'get_siswa_perkelas']);
+Route::get('hapus-siswa/{id}', [App\Http\Controllers\SiswaController::class, 'hapus_siswa']);

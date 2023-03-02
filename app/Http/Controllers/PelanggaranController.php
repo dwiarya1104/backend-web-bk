@@ -107,6 +107,9 @@ class PelanggaranController extends Controller
             }
             $rekap_prestasi = Prestasi::where('siswa_id', $value->id)->get();
             $array_penghargaan = [];
+            if (count($rekap_prestasi) == 0) {
+                $datas['rekap_penghargaan'] = [];
+            }
             foreach ($rekap_prestasi as $key => $rs) {
                 $get_penghargaan = ListPenghargaan::where('id', $rs->list_penghargaan_id)->first();
                 $data_prestasi = [
@@ -118,29 +121,30 @@ class PelanggaranController extends Controller
                 $array_penghargaan[] = $data_prestasi;
                 $datas['rekap_penghargaan'] = $array_penghargaan;
             }
+            if ($total_seluruh == 0) {
+                $tindakan = null;
+            }
+            if ($total_seluruh > 0 && $total_seluruh <= 75) {
+                $tindakan = 'Teguran/Pembinaan';
+            }
+            if ($total_seluruh >= 76 && $total_seluruh <= 100) {
+                $tindakan = 'SP1';
+            }
+            if ($total_seluruh >= 101 && $total_seluruh <= 200) {
+                $tindakan = 'SP2';
+            }
+            if ($total_seluruh >= 201 && $total_seluruh <= 300) {
+                $tindakan = 'SP3';
+            }
+            if ($total_seluruh > 300) {
+                $tindakan = 'DO/Dikeluarkan';
+            }
             $datas['kumulatif'] = [
                 'point_pelanggaran' => $total_pelanggaran,
                 'point_penghargaan' => $total_penghargaan,
-                'total' => $total_seluruh
+                'total' => $total_seluruh,
+                'tindakan' => $tindakan
             ];
-            if ($total_seluruh == 0) {
-                $datas['tindakan'] = null;
-            }
-            if ($total_seluruh > 0 && $total_seluruh <= 75) {
-                $datas['tindakan'] = 'Teguran/Pembinaan';
-            }
-            if ($total_seluruh >= 76 && $total_seluruh <= 100) {
-                $datas['tindakan'] = 'SP1';
-            }
-            if ($total_seluruh >= 101 && $total_seluruh <= 200) {
-                $datas['tindakan'] = 'SP2';
-            }
-            if ($total_seluruh >= 201 && $total_seluruh <= 300) {
-                $datas['tindakan'] = 'SP3';
-            }
-            if ($total_seluruh > 300) {
-                $datas['tindakan'] = 'DO/Dikeluarkan';
-            }
             $data[] = $datas;
         }
         return response()->json([
@@ -170,6 +174,7 @@ class PelanggaranController extends Controller
                 $total_seluruh = $total_pelanggaran - $total_penghargaan;
                 $datas['nama'] = $value->nama;
                 $datas['jk'] = $value->jk;
+                $datas['nis'] = $value->nis;
                 $datas['kumulatif'] = $total_seluruh;
                 if ($total_seluruh == 0) {
                     $datas['tindakan'] = null;
@@ -193,5 +198,13 @@ class PelanggaranController extends Controller
             }
         }
         return response()->json(['data' => $data]);
+    }
+
+    public function hapus_pelanggaran($id)
+    {
+        $pelanggaran = Pelanggar::find($id)->delete();
+        return response()->json([
+            'msg' => 'Berhasil Menghapus Pelanggaran'
+        ]);
     }
 }

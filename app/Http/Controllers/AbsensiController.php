@@ -7,6 +7,7 @@ use App\Models\Kelas;
 use App\Models\Pelanggar;
 use App\Models\Point;
 use App\Models\Siswa;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class AbsensiController extends Controller
@@ -456,9 +457,12 @@ class AbsensiController extends Controller
                     ->whereDate('created_at', date('Y-m-d'))
                     ->count();
             }
-            $datas['tanggal'] = date('d F Y');
+            $date = Carbon::now()->locale('id');
+            $date->settings(['formatFunction' => 'translatedFormat']);
+            $datas['tanggal'] = $date->format('l, j F Y');
             $data[] = $datas;
         }
+
         return response()->json([
             "status" => "success",
             "message" => "Get today presents datas successfully",

@@ -49,4 +49,22 @@ class SiswaController extends Controller
             'kelas_id' => $kelas->id
         ]);
     }
+
+    public function get_siswa_perkelas($kelas, $jurusan)
+    {
+        $kelas = Kelas::where('kelas', $kelas)->where('jurusan', $jurusan)->first();
+
+        $get_siswa = Siswa::where('kelas_id', $kelas->id)->get();
+        return response()->json([
+            'data' => $get_siswa
+        ]);
+    }
+
+    public function hapus_siswa($id)
+    {
+        $siswa = Siswa::find($id)->delete();
+        return response()->json([
+            'msg' => 'Berhasil Menghapus Siswa'
+        ]);
+    }
 }

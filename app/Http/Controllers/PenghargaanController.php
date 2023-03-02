@@ -73,4 +73,12 @@ class PenghargaanController extends Controller
             "data" => $prestasi
         ]);
     }
+
+    public function hapus_penghargaan($id)
+    {
+        $prestasi = Prestasi::find($id)->delete();
+        return response()->json([
+            'msg' => 'Berhasil Menghapus Prestasi'
+        ]);
+    }
 }
