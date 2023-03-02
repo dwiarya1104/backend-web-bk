@@ -459,7 +459,7 @@ class AbsensiController extends Controller
             }
             $date = Carbon::now()->locale('id');
             $date->settings(['formatFunction' => 'translatedFormat']);
-            $datas['tanggal'] = $date->format('l, j F Y');
+            $datas['tanggal'] = $date->format('j F Y');
             $data[] = $datas;
         }
 
