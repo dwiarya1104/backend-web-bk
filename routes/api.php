@@ -20,6 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('login', [App\Http\Controllers\AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->post('logout', [App\Http\Controllers\AuthController::class, 'logout']);
+Route::middleware('auth:sanctum')->get('get-user', [App\Http\Controllers\AuthController::class, 'get_user']);
 // LIST PENGHARGAAN DAN PELANGGARAN
 Route::get('list-pelanggaran', [App\Http\Controllers\PelanggaranController::class, 'list_pelanggaran']);
 Route::get('list-penghargaan', [App\Http\Controllers\PenghargaanController::class, 'list_penghargaan']);
@@ -47,4 +48,7 @@ Route::get('absen/semester/{semester}/{tahun_awal}-{tahun_akhir}/{kelas}-{jurusa
 
 Route::post('import', [App\Http\Controllers\SiswaController::class, 'import']);
 Route::get('siswa', [App\Http\Controllers\SiswaController::class, 'data_siswa']);
-Route::put('edit-siswa', [App\Http\Controllers\SiswaController::class, 'edit_siswa']);
+Route::get('siswa/{kelas}-{jurusan}', [App\Http\Controllers\SiswaController::class, 'data_siswa_perkelas']);
+Route::post('tambah-siswa', [App\Http\Controllers\SiswaController::class, 'tambah_siswa']);
+Route::put('siswa/{id}/edit-siswa', [App\Http\Controllers\SiswaController::class, 'edit_siswa']);
+Route::delete('siswa/{id}/hapus-siswa', [App\Http\Controllers\SiswaController::class, 'hapus_siswa']);

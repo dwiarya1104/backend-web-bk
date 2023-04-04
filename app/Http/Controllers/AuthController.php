@@ -36,4 +36,11 @@ class AuthController extends Controller
             'message' => 'Logout Sukses!'
         ]);
     }
+
+    public function get_user()
+    {
+        return response()->json([
+            "user" => auth()->user()
+        ], 200);
+    }
 }
