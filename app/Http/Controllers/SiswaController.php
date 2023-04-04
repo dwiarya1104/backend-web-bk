@@ -39,6 +39,31 @@ class SiswaController extends Controller
             "data" => $data
         ]);
     }
+    public function data_siswa_perkelas($kelas, $jurusan)
+    {
+        $data_kelas = Kelas::where(['jurusan' => $jurusan, 'kelas' => $kelas])->first();
+        $siswas = Siswa::where('kelas_id', $data_kelas->id)->get();
+
+        return response()->json([
+            'kelas' => $kelas,
+            'jurusan' => $jurusan,
+            "data" => $siswas
+        ]);
+    }
+    public function tambah_siswa(Request $request)
+    {
+        $siswa = Siswa::create([
+            'nis' => $request->nis,
+            'nama' => $request->nama,
+            'kelas_id' => $request->kelas_id,
+            'jk' => $request->jk
+        ]);
+        return response()->json([
+            "status" => "success",
+            "message" => "Berhasil Menambah siswa",
+            "data" => $siswa
+        ], 200);
+    }
     public function edit_siswa(Request $request, $id)
     {
         $siswa = Siswa::where('id', $id)->first();
@@ -62,9 +87,15 @@ class SiswaController extends Controller
 
     public function hapus_siswa($id)
     {
-        $siswa = Siswa::find($id)->delete();
+        $siswa = Siswa::where('id', $id)->first();
+        if (!$siswa) {
+            return response()->json([
+                "message" => "Siswa tidak ditemukan!"
+            ], 404);
+        }
+        $siswa->delete();
         return response()->json([
-            'msg' => 'Berhasil Menghapus Siswa'
+            "message" => "Berhasil menghapus siswa!"
         ]);
     }
 }
