@@ -39,7 +39,7 @@ class PelanggaranController extends Controller
 
     public function list_pelanggaran()
     {
-        $list_pelanggaran = ListPelanggaran::get();
+        $list_pelanggaran = ListPelanggaran::orderBy('point', 'DESC')->get();
         return response()->json([
             "status" => "success",
             "message" =>  "Get data pelanggaran successfully",
@@ -198,6 +198,19 @@ class PelanggaranController extends Controller
             }
         }
         return response()->json(['data' => $data]);
+    }
+
+    public function edit_pelanggaran(Request $request, $id)
+    {
+        $pelanggaran = Pelanggar::find($id);
+        $pelanggaran->update([
+            'list_pelanggaran_id' => $request->list_pelanggaran_id
+        ]);
+
+        return response()->json([
+            'msg' => 'Berhasil Mengedit Pelanggaran'
+            // 'data' => $pelanggaran
+        ]);
     }
 
     public function hapus_pelanggaran($id)

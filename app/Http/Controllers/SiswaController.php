@@ -19,7 +19,7 @@ class SiswaController extends Controller
             );
             return response()->json(['message' => 'Berhasil Import Siswa!']);
         } catch (\Throwable $th) {
-            return response()->json(['message' => 'Gagal Import Siswa!, Nama Jurusan Jangan Pakai Spasi']);
+            return response()->json(['message' => 'Gagal Import Siswa!, Nama Jurusan Jangan Pakai Spasi', 'error' => $th]);
         }
     }
 
@@ -42,7 +42,7 @@ class SiswaController extends Controller
     public function data_siswa_perkelas($kelas, $jurusan)
     {
         $data_kelas = Kelas::where(['jurusan' => $jurusan, 'kelas' => $kelas])->first();
-        $siswas = Siswa::where('kelas_id', $data_kelas->id)->get();
+        $siswas = Siswa::where('kelas_id', $data_kelas->id)->orderBy('nama', 'ASC')->get();
 
         return response()->json([
             'kelas' => $kelas,
@@ -52,10 +52,12 @@ class SiswaController extends Controller
     }
     public function tambah_siswa(Request $request)
     {
+        $data_kelas = Kelas::where(['jurusan' => $request->jurusan, 'kelas' => $request->kelas])->first();
+
         $siswa = Siswa::create([
             'nis' => $request->nis,
             'nama' => $request->nama,
-            'kelas_id' => $request->kelas_id,
+            'kelas_id' => $data_kelas->id,
             'jk' => $request->jk
         ]);
         return response()->json([
@@ -68,21 +70,17 @@ class SiswaController extends Controller
     {
         $siswa = Siswa::where('id', $id)->first();
 
-        $get_kelas = explode(' ', $request->kelas);
-        $kelas = Kelas::where('kelas', $get_kelas[0])->where('jurusan', $get_kelas[1])->first();
         $siswa->update([
-            'kelas_id' => $kelas->id
+            'nis' => $request->nis,
+            'nama' => $request->nama,
+            'jk' => $request->jk
         ]);
-    }
 
-    public function get_siswa_perkelas($kelas, $jurusan)
-    {
-        $kelas = Kelas::where('kelas', $kelas)->where('jurusan', $jurusan)->first();
-
-        $get_siswa = Siswa::where('kelas_id', $kelas->id)->get();
         return response()->json([
-            'data' => $get_siswa
-        ]);
+            "status" => "success",
+            "message" => "Berhasil mengubah data siswa",
+            "data" => $siswa
+        ], 200);
     }
 
     public function hapus_siswa($id)
@@ -90,12 +88,34 @@ class SiswaController extends Controller
         $siswa = Siswa::where('id', $id)->first();
         if (!$siswa) {
             return response()->json([
+                "status" => "failed",
                 "message" => "Siswa tidak ditemukan!"
             ], 404);
         }
         $siswa->delete();
         return response()->json([
-            "message" => "Berhasil menghapus siswa!"
+            "message" => "Berhasil menghapus siswa",
+            "status" => "success"
         ]);
+    }
+
+    public function hapus_selected_siswa(Request $request)
+    {
+        // $ids = [248, 634];
+        $destroy = Siswa::destroy($request->destroy);
+
+        if ($destroy) {
+            return response()->json([
+                "status" => "success",
+                "message" => "Berhasil menghapus data siswa",
+                'data' => $request
+            ]);
+        } else {
+            return response()->json([
+                "status" => "failed",
+                "message" => "Gagal menghapus data siswa",
+                'data' => $request
+            ]);
+        }
     }
 }

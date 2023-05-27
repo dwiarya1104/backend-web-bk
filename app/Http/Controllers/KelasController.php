@@ -12,7 +12,7 @@ class KelasController extends Controller
 {
     public function kelas()
     {
-        $kelas = Kelas::get();
+        $kelas = Kelas::orderBy('kelas', 'ASC')->orderBy('jurusan', 'ASC')->get();
         $tes = Absensi::select(
             DB::raw("YEAR(created_at) as year")
         )
@@ -20,9 +20,12 @@ class KelasController extends Controller
             ->groupBy('year')
             ->get();
 
+        $data = Kelas::groupBy('kelas')->get();
+
         return response()->json([
             "data" => $kelas,
-            "tes" => $tes
+            "tes" => $tes,
+            'arul' => $data
         ]);
     }
 
@@ -47,6 +50,7 @@ class KelasController extends Controller
             'jurusan' => $request->jurusan
         ]);
         return response()->json([
+            "status" => "success",
             "message" => "Berhasil mengedit kelas!"
         ]);
     }
@@ -57,11 +61,13 @@ class KelasController extends Controller
         $kelas = Kelas::where('id', $id)->first();
         if (!$kelas) {
             return response()->json([
+                "status" => "failed",
                 "message" => "Kelas tidak ditemukan!"
             ], 404);
         }
         $kelas->delete();
         return response()->json([
+            "status" => "success",
             "message" => "Berhasil menghapus kelas!"
         ]);
     }

@@ -35,7 +35,7 @@ class PenghargaanController extends Controller
 
     public function list_penghargaan()
     {
-        $list_penghargaan = ListPenghargaan::get();
+        $list_penghargaan = ListPenghargaan::orderBy('point', 'DESC')->get();
         return response()->json([
             "status" => "success",
             "message" => "Get data penghargaan successfully",
